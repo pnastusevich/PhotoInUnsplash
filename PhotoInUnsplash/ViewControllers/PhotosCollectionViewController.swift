@@ -29,12 +29,6 @@ final class PhotosCollectionViewController: UICollectionViewController {
         return label
     }()
     
-    private let spinner: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .medium)
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        return spinner
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,7 +36,6 @@ final class PhotosCollectionViewController: UICollectionViewController {
         setupCollectionView()
         setupSearchBar()
         setupEnterLabel()
-        setupSpinner()
         downloadsRandomImage()
     }
        
@@ -102,13 +95,6 @@ extension PhotosCollectionViewController {
         enterSearchTermLabel.topAnchor.constraint(equalTo: collectionView.topAnchor, constant: 50).isActive = true
     }
     
-    private func setupSpinner() {
-        view.addSubview(spinner)
-        spinner.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor).isActive = true
-        spinner.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor).isActive = true
-        spinner.startAnimating()
-    }
-    
     private func setupNavigationBar() {
         title = "Photos"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -133,7 +119,6 @@ extension PhotosCollectionViewController {
                 self.photos = []
                 self.photos = images
                 self.collectionView.reloadData()
-                self.spinner.stopAnimating()
             case .failure(let error):
                 print(error)
             }
@@ -146,7 +131,6 @@ extension PhotosCollectionViewController {
         case .success(let images):
             self.photos = []
             self.photos = images
-            self.spinner.stopAnimating()
             self.collectionView.reloadData()
         case .failure(let error):
             print(error)
@@ -158,7 +142,6 @@ extension PhotosCollectionViewController {
 // MARK: - UISearchBarDelegate
 extension PhotosCollectionViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.spinner.startAnimating()
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1,repeats: false, block: { (_) in
             self.downloadsImageForSearch(searchText: searchText)
