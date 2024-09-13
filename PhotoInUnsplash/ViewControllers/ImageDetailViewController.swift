@@ -11,11 +11,11 @@ final class ImageDetailViewController: UIViewController {
     
     let likedPhotosStorageManager = LikedPhotosStorageManager.shared
     
-    var imageUrl: String?
-    var authorName: String?
-    var creationDate: String?
+    var imageUrl: String!
+    var authorName: String!
+    var creationDate: String!
     var location: String?
-    var downloads: Int?
+    var downloads: Int!
     
     // MARK: - UI Elements
     private lazy var addBarButtonItem: UIBarButtonItem = {
@@ -33,7 +33,6 @@ final class ImageDetailViewController: UIViewController {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .gray
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
@@ -85,6 +84,7 @@ final class ImageDetailViewController: UIViewController {
         
         let add = UIAlertAction(title: "Done", style: .default) { (action) in
             self.imageSaving()
+            self.updateLikeButtonsState()
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel)
         alertController.addAction(add)
@@ -93,14 +93,6 @@ final class ImageDetailViewController: UIViewController {
     }
     
     @objc private func deleteBarButtonTapped() {
-        
-        guard let imageUrl = imageUrl,
-              let authorName = authorName,
-              let creationDate = creationDate,
-              let downloads = downloads,
-              let location = location
-        else { return }
-        
         let likedPhoto = LikedPhoto(
             imageUrl: imageUrl,
             authorName: authorName,
@@ -114,12 +106,6 @@ final class ImageDetailViewController: UIViewController {
     }
     
     @objc func imageSaving() {
-        guard let imageUrl = imageUrl,
-              let authorName = authorName,
-              let creationDate = creationDate,
-              let downloads = downloads
-        else { return }
-
         let likedPhoto = LikedPhoto(imageUrl: imageUrl,
                                     authorName: authorName,
                                     creationDate: creationDate,
@@ -152,9 +138,10 @@ final class ImageDetailViewController: UIViewController {
         private func setupView() {
             view.backgroundColor = .white
             
-            guard let creationDate = creationDate else { return }
-            guard let downloads = downloads else { return }
+            guard let creationDate = creationDate, let downloads = downloads else { return }
+            
             let date = convertDateString(isoDateString: creationDate)
+            
             dateLabel.text = "Created at: \(date ?? "Unknown")"
             authorLabel.text = "Author: \(authorName ?? "Unknown")"
             downloadsLabel.text = "Downloads: \(String(downloads))"
@@ -201,15 +188,7 @@ final class ImageDetailViewController: UIViewController {
             updateLikeButtonsState()
         }
         
-        func updateLikeButtonsState() {
-
-            guard let imageUrl = imageUrl,
-                  let authorName = authorName,
-                  let creationDate = creationDate,
-                  let downloads = downloads,
-                  let location = location
-            else { return }
-            
+       private func updateLikeButtonsState() {
             let photoToCheck = LikedPhoto(imageUrl: imageUrl,
                                           authorName: authorName,
                                           creationDate: creationDate,
