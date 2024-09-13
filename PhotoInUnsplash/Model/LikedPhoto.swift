@@ -7,13 +7,11 @@
 
 import Foundation
 
-final class SavedImageModel {
-    
-    var savedImage = UnsplashPhoto()
-    
-    static let shared = SavedImageModel()
-    
-    private init() {}
-    
+struct LikedPhoto {
+    let imageUrl: String
+    let authorName: String
+    let creationDate: String
+    let location: String?
+    let downloads: Int
 }
 

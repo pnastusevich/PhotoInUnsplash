@@ -18,8 +18,12 @@ final class LikedPhotosStorageManager {
         likedPhotos.append(photo)
     }
     
+    func isPhotoLiked(photo: LikedPhoto) -> Bool {
+        return likedPhotos.contains { $0.imageUrl == photo.imageUrl && $0.authorName == photo.authorName && $0.creationDate == photo.creationDate }
+    }
+    
     func removePhoto(_ photo: LikedPhoto) {
-        if let index = likedPhotos.firstIndex(where: { $0.imageUrl == photo.imageUrl && $0.authorName == photo.authorName }) {
+        if let index = likedPhotos.firstIndex(where: { $0.imageUrl == photo.imageUrl && $0.authorName == photo.authorName && $0.creationDate == photo.creationDate}) {
             likedPhotos.remove(at: index)
         }
     }
