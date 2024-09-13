@@ -117,8 +117,7 @@ final class ImageDetailViewController: UIViewController {
         guard let imageUrl = imageUrl,
               let authorName = authorName,
               let creationDate = creationDate,
-              let downloads = downloads,
-              let location = location
+              let downloads = downloads
         else { return }
 
         let likedPhoto = LikedPhoto(imageUrl: imageUrl,
